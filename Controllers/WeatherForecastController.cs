@@ -1,39 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace dotnet_http_client.Controllers
+namespace DotNetHttpClient.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class HttpClientController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        static readonly HttpClient _client = new HttpClient();
+        static readonly string _url = "https://www.metaweather.com/api/location/search/?query=frankfurt";
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+        public HttpClientController() { }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<string> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var request = new HttpRequestMessage(HttpMethod.Get, _url);
+            var response = await _client.SendAsync(request);
+
+            if(response.IsSuccessStatusCode)
+                return await response.Content.ReadAsStringAsync();
+            else
+                return "Some kind of error happaned...";
         }
     }
 }
