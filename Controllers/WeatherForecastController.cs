@@ -18,13 +18,14 @@ namespace DotNetHttpClient.Controllers
         [HttpGet]
         public async Task<WeatherForecast> Get()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, _url);
-            var response = await _client.SendAsync(request);
-
-            if(response.IsSuccessStatusCode)
-                return await response.Content.ReadFromJsonAsync<WeatherForecast>();
-            else
-                throw new Exception($"Something went wrong. Error: {response.ReasonPhrase}");
+            try
+            {
+                return await _client.GetFromJsonAsync<WeatherForecast>(_url);
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Something went wrong. Error: {ex.Message}");
+            }
         }
     }
 }
