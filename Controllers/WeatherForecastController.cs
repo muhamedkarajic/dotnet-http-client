@@ -10,10 +10,12 @@ namespace DotNetHttpClient.Controllers
     [Route("[controller]")]
     public class HttpClientController : ControllerBase
     {
-        static readonly HttpClient _client = new HttpClient();
+        private readonly HttpClient _client = new HttpClient();
         static readonly string _url = "https://www.metaweather.com/api/location/650272/";
 
-        public HttpClientController() { }
+        public HttpClientController(HttpClient client) { 
+            _client = client;
+        }
 
         [HttpGet]
         public async Task<WeatherForecast> Get()
