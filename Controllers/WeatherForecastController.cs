@@ -24,7 +24,7 @@ namespace DotNetHttpClient.Controllers
             if(response.IsSuccessStatusCode)
                 return await response.Content.ReadFromJsonAsync<WeatherForecast>();
             else
-                throw new Exception("Something went wrong.");
+                throw new Exception($"Something went wrong. Error: {response.ReasonPhrase}");
         }
     }
 }
