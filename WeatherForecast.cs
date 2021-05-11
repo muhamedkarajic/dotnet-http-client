@@ -1,6 +1,6 @@
 using System;
 
-namespace dotnet_http_client
+namespace DotNetHttpClient
 {
     public class WeatherForecast
     {
