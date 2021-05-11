@@ -10,11 +10,11 @@ namespace DotNetHttpClient.Controllers
     [Route("[controller]")]
     public class HttpClientController : ControllerBase
     {
-        private readonly HttpClient _client = new HttpClient();
-        static readonly string _url = "https://www.metaweather.com/api/location/650272/";
+        private readonly IHttpClientFactory _clientFactory;
+        static readonly string _url = "location/650272/";
 
-        public HttpClientController(HttpClient client) { 
-            _client = client;
+        public HttpClientController(IHttpClientFactory clientFactory) { 
+            _clientFactory = clientFactory;
         }
 
         [HttpGet]
@@ -22,8 +22,9 @@ namespace DotNetHttpClient.Controllers
         {
             try
             {
-                return await _client.GetFromJsonAsync<WeatherForecast>(_url);
-            }
+                var client = _clientFactory.CreateClient("meta");
+                return await client.GetFromJsonAsync<WeatherForecast>(_url);
+            } 
             catch (System.Exception ex)
             {
                 throw new Exception($"Something went wrong. Error: {ex.Message}");
