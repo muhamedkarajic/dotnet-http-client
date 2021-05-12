@@ -32,6 +32,10 @@ namespace DotNetHttpClient
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = ".NET Http Client", Version = "v1" });
             });
+<<<<<<< Updated upstream
+=======
+            services.AddHttpClient();
+>>>>>>> Stashed changes
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
